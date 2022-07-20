@@ -32,12 +32,12 @@ class Program
         num2 = new int[] {1,2};
         Console.WriteLine(String.Join(',',Intersect(num1, num2)));
 
-        num1 = new int[] {4,9,5};
-        num2 = new int[] {9,4,9,8,4};
-        Console.WriteLine(String.Join(',',Intersect(num1, num2)));
-
         num1 = new int[] {3,1,2};
         num2 = new int[] {1,3};
+        Console.WriteLine(String.Join(',',Intersect(num1, num2)));
+
+        num1 = new int[] {1,2,2,1};
+        num2 = new int[] {1,1};
         Console.WriteLine(String.Join(',',Intersect(num1, num2)));
     }
 
@@ -50,13 +50,81 @@ class Program
             nums2 = temp;
         }
 
-        var nonSortedIntersect = FindIntersect(nums1, nums2);
-        Array.Sort(nums1);
-        var sortedIntersect = FindIntersect(nums1,nums2);
+        int startIndex = -1, endIndex = -1;
+        int indexLength = -1;
+        for (int i = 0; i < nums1.Length; i++)
+        {
+            if (nums1[i] == nums2[0])
+            {
+                // Right side intersection
+                int tempIndexLength = 1, tempEndIndex = i;
 
-        return sortedIntersect.Length > nonSortedIntersect.Length
-            ? sortedIntersect
-            : nonSortedIntersect;
+                for (int j = i+1,k = 1; j < nums1.Length && k < nums2.Length; j++,k++)
+                {
+                    if (nums1[j] == nums2[k])
+                    {
+                        tempIndexLength++;
+                        tempEndIndex = j;
+                    }
+                    else if(nums2[k] == nums1[i])
+                    {
+                        tempIndexLength++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (tempIndexLength > indexLength)
+                {
+                    startIndex = i;
+                    endIndex = tempEndIndex;
+                    indexLength = tempIndexLength;
+                }
+
+                // Leftside intersection
+                tempIndexLength = 1;
+                tempEndIndex = i;
+
+                for (int j = i - 1, k = 1; j >= 0 && k < nums2.Length; j--,k++)
+                {
+                    if (nums1[j] == nums2[k])
+                    {
+                        tempIndexLength++;
+                        tempEndIndex = j;
+                    }
+                    else if()
+                    {
+                        
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (tempIndexLength > indexLength)
+                {
+                    startIndex = tempEndIndex;
+                    endIndex = i;
+                    indexLength = tempIndexLength;
+                }
+            }
+        }
+
+        if (indexLength > 0)
+        {
+            var intersectArray = new int[(endIndex - startIndex) + 1];
+            for (int i = startIndex,j = 0; i <= endIndex; i++)
+            {
+                intersectArray[j++] = nums1[i];
+            }
+
+            return intersectArray;
+        }
+
+        return new int[] {};
     }
 
     public static int[] FindIntersect(int[] nums1, int[] nums2)
@@ -67,6 +135,7 @@ class Program
         {
             if (nums1[i] == nums2[0])
             {
+                // Right side intersection
                 int tempIndexLength = 1, tempEndIndex = i;
 
                 for (int j = i+1,k = 1; j < nums1.Length && k < nums2.Length; j++,k++)
@@ -88,6 +157,30 @@ class Program
                     endIndex = tempEndIndex;
                     indexLength = tempIndexLength;
                 }
+
+                // Leftside intersection
+                tempIndexLength = 1;
+                tempEndIndex = i;
+
+                for (int j = i - 1, k = 1; j >= 0 && k < nums2.Length; j--,k++)
+                {
+                    if (nums1[j] == nums2[k])
+                    {
+                        tempIndexLength++;
+                        tempEndIndex = j;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (tempIndexLength > indexLength)
+                {
+                    startIndex = tempEndIndex;
+                    endIndex = i;
+                    indexLength = tempIndexLength;
+                }
             }
         }
 
@@ -105,3 +198,5 @@ class Program
         return new int[] {};
     }
 }
+
+// https://leetcode.com/explore/featured/card/top-interview-questions-easy/92/array/674/

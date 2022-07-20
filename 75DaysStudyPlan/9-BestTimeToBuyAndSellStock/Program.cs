@@ -17,34 +17,36 @@ namespace _
         // Naive approach
         public static int MaxProfit(int[] prices)
         {
-            int maxProfit = 0;
-            int currentProfit = 0;
-            for (int i = 0; i < prices.Length; i++)
-            {
-                for (int j = i+1; j < prices.Length; j++)
-                {
-                    currentProfit = prices[j] - prices[i];
-                    maxProfit = currentProfit > maxProfit ? currentProfit : maxProfit;
-                }
-            }
+            // int maxProfit = 0;
+            // int currentProfit = 0;
+            // for (int i = 0; i < prices.Length; i++)
+            // {
+            //     for (int j = i+1; j < prices.Length; j++)
+            //     {
+            //         currentProfit = prices[j] - prices[i];
+            //         maxProfit = currentProfit > maxProfit ? currentProfit : maxProfit;
+            //     }
+            // }
 
-            return maxProfit;
+            // return maxProfit;
+
+            return MaxProfitRecursive(prices,0,1);
         }
 
         public static int MaxProfitRecursive(int[] prices, int i, int j)
         {
             if (i < prices.Length)
             {
-                int maxProfit = 0;
-
                 if (j < prices.Length)
                 {
-                    
+                    var currentProfit = prices[j] - prices[i];
+                    var profit = MaxProfitRecursive(prices, i, j+1);
+                    return currentProfit > profit ? currentProfit : profit;
                 }
 
                 return MaxProfitRecursive(prices, i+1, i+2);
             }
-            
+
             return 0;
         }
     }

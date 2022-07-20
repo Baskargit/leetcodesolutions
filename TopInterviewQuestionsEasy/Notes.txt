@@ -1,0 +1,7 @@
+Time exceeded problems
+2-Rotate Array
+
+Can be Further optimized
+3-ContainsDuplicate
+https://www.geeksforgeeks.org/find-duplicates-in-on-time-and-constant-extra-space/
+

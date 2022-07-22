@@ -27,7 +27,9 @@ class Program
         num2 = new int[] {};
         Console.WriteLine(String.Join(',',Intersect(num1, num2)));
 
-        // Failed test case
+        // Failed test cases
+        // Reason : Not understood the problem correctly. Only focused on the output and chaned existing code according to the failed test cases
+        // Learning: Read problem more than twice and do not write or update code as per failed test cases
         num1 = new int[] {2,1};
         num2 = new int[] {1,2};
         Console.WriteLine(String.Join(',',Intersect(num1, num2)));
@@ -51,10 +53,21 @@ class Program
         num1 = new int[] {9,3,7};
         num2 = new int[] {6,4,1,0,0,4,4,8,7};
         Console.WriteLine(String.Join(',',Intersect(num1, num2)));
+
+        num1 = new int[] {3,1,2};
+        num2 = new int[] {1,1};
+        Console.WriteLine(String.Join(',',Intersect(num1, num2)));
     }
 
     public static int[] Intersect(int[] nums1, int[] nums2)
     {
+        if (nums2.Length < nums1.Length)
+        {
+            var temp = nums1;
+            nums1 = nums2;
+            nums2 = temp;
+        }
+
         var dic = new Dictionary<int, int>();
         var list = new List<int>();
 
@@ -84,6 +97,11 @@ class Program
                 {
                     dic[nums2[i]]--;
                 }
+            }
+
+            if (dic.Count <= 0)
+            {
+                break;
             }
         }
 

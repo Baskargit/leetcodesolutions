@@ -39,76 +39,125 @@ class Program
         num1 = new int[] {1,2,2,1};
         num2 = new int[] {1,1};
         Console.WriteLine(String.Join(',',Intersect(num1, num2)));
+
+        num1 = new int[] {1,2};
+        num2 = new int[] {1,1};
+        Console.WriteLine(String.Join(',',Intersect(num1, num2)));
+
+        num1 = new int[] {4,7,9,7,6,7};
+        num2 = new int[] {5,0,0,6,1,6,2,2,4};
+        Console.WriteLine(String.Join(',',Intersect(num1, num2)));
+
+        num1 = new int[] {9,3,7};
+        num2 = new int[] {6,4,1,0,0,4,4,8,7};
+        Console.WriteLine(String.Join(',',Intersect(num1, num2)));
     }
 
     public static int[] Intersect(int[] nums1, int[] nums2)
     {
-        if (nums2.Length > nums1.Length)
+        var dic = new Dictionary<int, int>();
+        var list = new List<int>();
+
+        for (int i = 0; i < nums1.Length; i++)
         {
-            var temp = nums1;
-            nums1 = nums2;
-            nums2 = temp;
+            if (dic.ContainsKey(nums1[i]))
+            {
+                dic[nums1[i]]++;
+            }
+            else
+            {
+                dic.Add(nums1[i],1);
+            }
         }
 
+        for (int i = 0; i < nums2.Length; i++)
+        {
+            if (dic.ContainsKey(nums2[i]))
+            {
+                list.Add(nums2[i]);
+
+                if (dic[nums2[i]] - 1 == 0)
+                {
+                    dic.Remove(nums2[i]);
+                }
+                else
+                {
+                    dic[nums2[i]]--;
+                }
+            }
+        }
+
+        return list.ToArray();
+    }
+
+    public static int[] FindIntersect(int[] nums1, int[] nums2)
+    {
         int startIndex = -1, endIndex = -1;
         int indexLength = -1;
         for (int i = 0; i < nums1.Length; i++)
         {
-            if (nums1[i] == nums2[0])
+            for (int l = 0; l < nums2.Length; l++)
             {
-                // Right side intersection
-                int tempIndexLength = 1, tempEndIndex = i;
-
-                for (int j = i+1,k = 1; j < nums1.Length && k < nums2.Length; j++,k++)
+                if (nums1[i] == nums2[l])
                 {
-                    if (nums1[j] == nums2[k])
-                    {
-                        tempIndexLength++;
-                        tempEndIndex = j;
-                    }
-                    else if(nums2[k] == nums1[i])
-                    {
-                        tempIndexLength++;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+                    // Right side intersection
+                    int tempIndexLength = 1, tempEndIndex = l;
+                    bool isMathFound = false;
 
-                if (tempIndexLength > indexLength)
-                {
-                    startIndex = i;
-                    endIndex = tempEndIndex;
-                    indexLength = tempIndexLength;
-                }
-
-                // Leftside intersection
-                tempIndexLength = 1;
-                tempEndIndex = i;
-
-                for (int j = i - 1, k = 1; j >= 0 && k < nums2.Length; j--,k++)
-                {
-                    if (nums1[j] == nums2[k])
+                    for (int j = i+1,k = l + 1; j < nums1.Length && k < nums2.Length; j++)
                     {
-                        tempIndexLength++;
-                        tempEndIndex = j;
+                        if (nums1[j] == nums2[k])
+                        {
+                            tempIndexLength++;
+                            tempEndIndex = k;
+                            isMathFound = true;
+                            k++;
+                        }
+                        else
+                        {
+                            if (isMathFound)
+                            {
+                                break;
+                            }
+                        }
                     }
-                    else if()
-                    {
-                        
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
 
-                if (tempIndexLength > indexLength)
-                {
-                    startIndex = tempEndIndex;
-                    endIndex = i;
-                    indexLength = tempIndexLength;
+                    if (tempIndexLength > indexLength)
+                    {
+                        startIndex = 0;
+                        endIndex = tempEndIndex;
+                        indexLength = tempIndexLength;
+                    }
+
+                    // Leftside intersection
+                    tempIndexLength = 1;
+                    tempEndIndex = l;
+                    isMathFound = false;
+
+                    for (int j = i - 1, k = l + 1; j >= 0 && k < nums2.Length; j--)
+                    {
+                        if (nums1[j] == nums2[k])
+                        {
+                            tempIndexLength++;
+                            tempEndIndex = k;
+                            isMathFound = true;
+                            k++;
+                        }
+                        else
+                        {
+                            if (isMathFound)
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (tempIndexLength > indexLength)
+                    {
+                        startIndex = l;
+                        endIndex = tempEndIndex;
+                        indexLength = tempIndexLength;
+                    }
                 }
             }
         }
@@ -118,78 +167,7 @@ class Program
             var intersectArray = new int[(endIndex - startIndex) + 1];
             for (int i = startIndex,j = 0; i <= endIndex; i++)
             {
-                intersectArray[j++] = nums1[i];
-            }
-
-            return intersectArray;
-        }
-
-        return new int[] {};
-    }
-
-    public static int[] FindIntersect(int[] nums1, int[] nums2)
-    {
-        int startIndex = -1, endIndex = -1;
-        int indexLength = -1;
-        for (int i = 0; i < nums1.Length; i++)
-        {
-            if (nums1[i] == nums2[0])
-            {
-                // Right side intersection
-                int tempIndexLength = 1, tempEndIndex = i;
-
-                for (int j = i+1,k = 1; j < nums1.Length && k < nums2.Length; j++,k++)
-                {
-                    if (nums1[j] == nums2[k])
-                    {
-                        tempIndexLength++;
-                        tempEndIndex = j;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                if (tempIndexLength > indexLength)
-                {
-                    startIndex = i;
-                    endIndex = tempEndIndex;
-                    indexLength = tempIndexLength;
-                }
-
-                // Leftside intersection
-                tempIndexLength = 1;
-                tempEndIndex = i;
-
-                for (int j = i - 1, k = 1; j >= 0 && k < nums2.Length; j--,k++)
-                {
-                    if (nums1[j] == nums2[k])
-                    {
-                        tempIndexLength++;
-                        tempEndIndex = j;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                if (tempIndexLength > indexLength)
-                {
-                    startIndex = tempEndIndex;
-                    endIndex = i;
-                    indexLength = tempIndexLength;
-                }
-            }
-        }
-
-        if (indexLength != -1)
-        {
-            var intersectArray = new int[(endIndex - startIndex) + 1];
-            for (int i = startIndex,j = 0; i <= endIndex; i++)
-            {
-                intersectArray[j++] = nums1[i];
+                intersectArray[j++] = nums2[i];
             }
 
             return intersectArray;

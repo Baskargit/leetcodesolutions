@@ -5,3 +5,6 @@ Can be Further optimized
 3-ContainsDuplicate
 https://www.geeksforgeeks.org/find-duplicates-in-on-time-and-constant-extra-space/
 
+9-ValidSudoku
+https://www.geeksforgeeks.org/check-if-given-sudoku-board-configuration-is-valid-or-not/
+
